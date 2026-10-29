@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="icon" type="image/png" href="/favicon.png"><link rel="shortcut icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="theme-color" content="#5c2d91"><meta property="og:title" content="Meet Call · Controle de Acordos"><meta property="og:image" content="/logo.png"><meta property="og:type" content="website">
+<title>Preventivo · Controle de Acordos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3effe;--card:rgba(255,255,255,.82);--bd:rgba(147,51,234,.25);--tx:#1e1035;--mut:#6b5a88;--p:#8b5cf6;--p2:#d946ef;--in:rgba(255,255,255,.95);--sh:0 12px 40px rgba(139,92,246,.18);--gl:rgba(168,85,247,.35);--hv:rgba(147,51,234,.1);--o:.35;--ok:#16a34a;--wa:#d97706;--ba:#f43f5e;--ci:#06b6d4;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f0720;--card:rgba(28,15,50,.72);--bd:rgba(168,85,247,.35);--tx:#f5edff;--mut:#b8a5dc;--in:rgba(20,10,38,.85);--sh:0 14px 45px rgba(0,0,0,.55);--hv:rgba(168,85,247,.18);--o:.5;--ok:#4ade80;--wa:#fbbf24;--ba:#fb7185;--ci:#22d3ee;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f0720;--card:rgba(28,15,50,.72);--bd:rgba(168,85,247,.35);--tx:#f5edff;--mut:#b8a5dc;--in:rgba(20,10,38,.85);--sh:0 14px 45px rgba(0,0,0,.55);--hv:rgba(168,85,247,.18);--o:.5;--ok:#4ade80;--wa:#fbbf24;--ba:#fb7185;--ci:#22d3ee;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden}
+.bg i{position:absolute;border-radius:50%;filter:blur(80px);opacity:var(--o);animation:fl 16s ease-in-out infinite alternate}
+.bg i:nth-child(1){width:48vmax;height:48vmax;background:#7c3aed;left:-12vmax;top:-14vmax}
+.bg i:nth-child(2){width:40vmax;height:40vmax;background:#c026d3;right:-10vmax;top:20vh;animation-delay:-5s}
+.bg i:nth-child(3){width:36vmax;height:36vmax;background:#4f46e5;left:25vw;bottom:-16vmax;animation-delay:-9s}
+@keyframes fl{to{transform:translate(6vmax,-5vmax) scale(1.15)}}
+@keyframes up{from{opacity:0;transform:translateY(16px)}}
+
+.c{background:var(--card);border:1px solid var(--bd);border-radius:18px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:var(--sh);padding:20px;transition:.25s;animation:up .5s both}
+.c:hover{transform:translateY(-2px);box-shadow:0 16px 48px var(--gl)}
+.lg{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--p),var(--p2));display:grid;place-items:center;font-size:22px;box-shadow:0 0 24px var(--gl);flex:none;animation:pu 3s infinite}
+@keyframes pu{50%{box-shadow:0 0 36px var(--p)}}
+
+.lay{display:grid;grid-template-columns:260px 1fr;gap:18px;max-width:1440px;margin:0 auto;padding:18px;align-items:start;transition:grid-template-columns .3s ease}
+
+.sb{position:sticky;top:18px;height:calc(100vh - 36px);display:flex;flex-direction:column;gap:6px;padding:16px;background:var(--card);border:1px solid var(--bd);border-radius:22px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:var(--sh);transition:all .3s ease;overflow:hidden}
+.brand{display:flex;gap:12px;align-items:center;padding-bottom:14px;margin-bottom:8px;border-bottom:1px solid var(--bd)}
+.brand b{font-size:16px;display:block;line-height:1.2;white-space:nowrap}
+.brand span{color:var(--mut);font-size:11px;white-space:nowrap}
+.burger-btn{background:transparent;border:1px solid var(--bd);color:var(--tx);font-size:18px;cursor:pointer;padding:8px;border-radius:10px;display:flex;align-items:center;justify-content:center;transition:.2s;flex:none}
+.burger-btn:hover{background:var(--hv);transform:scale(1.05)}
+
+
+.mn{display:flex;flex-direction:column;gap:6px}
+.it{display:flex;align-items:center;gap:12px;width:100%;padding:11px 14px;border-radius:14px;border:1px solid transparent;background:transparent;color:var(--tx);font:inherit;font-weight:700;font-size:14px;cursor:pointer;text-align:left;transition:.25s;white-space:nowrap}
+.it:hover{background:var(--hv);transform:translateX(3px)}
+.it.on{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;box-shadow:0 8px 24px var(--gl)}
+.it .ic{font-size:18px;width:24px;text-align:center;flex:none}
+.me{margin-top:auto;display:flex;flex-direction:column;gap:12px;padding-top:14px;border-top:1px solid var(--bd)}
+.who{display:flex;gap:10px;align-items:center}
+.av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--p2));display:grid;place-items:center;color:#fff;font-weight:800;box-shadow:0 0 18px var(--gl);flex:none}
+.who b{display:block;font-size:13px;line-height:1.2;white-space:nowrap}
+.who span{color:var(--mut);font-size:11px;white-space:nowrap}
+.ac{display:flex;gap:8px}
+.ac .b{flex:1;padding:8px 12px;font-size:13px}
+main{min-width:0}
+
+.b{border:0;border-radius:12px;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--p),var(--p2));position:relative;overflow:hidden;transition:.25s}
+.b:hover{transform:translateY(-2px);box-shadow:0 8px 26px var(--gl)}
+.b:active{transform:scale(.97)}
+.b:disabled{opacity:.6;cursor:wait}
+.b.g{background:var(--in);color:var(--tx);border:1px solid var(--bd)}
+.ch{padding:7px 13px;border-radius:99px;border:1px solid var(--bd);background:var(--in);cursor:pointer;font:inherit;font-weight:700;font-size:13px;color:var(--tx);transition:.2s}
+.ch:hover{transform:translateY(-2px)}
+.ch.on{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;border-color:transparent;box-shadow:0 6px 20px var(--gl)}
+input,select{width:100%;padding:11px 13px;border-radius:12px;border:1px solid var(--bd);background:var(--in);color:var(--tx);font:inherit;outline:0;transition:.2s}
+input:focus,select:focus{border-color:var(--p);box-shadow:0 0 0 4px var(--gl)}
+input[readonly]{opacity:.75}
+label{display:block;font-size:11px;font-weight:800;color:var(--mut);margin:0 0 5px;letter-spacing:.04em;text-transform:uppercase}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.kp5{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:16px}
+.kp5 span{color:var(--mut);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.kp5 b{display:block;font-size:26px;font-weight:800;color:var(--p);background:linear-gradient(135deg,var(--p),var(--p2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:13.5px;min-width:850px}
+th{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;padding:11px 12px;text-align:left;font-size:11px;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+th:first-child{border-radius:10px 0 0 10px}th:last-child{border-radius:0 10px 10px 0}
+td{padding:11px 12px;border-bottom:1px solid var(--bd);white-space:nowrap}
+tbody tr:hover{background:var(--hv)}
+.s{display:inline-block;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:800;color:var(--sc);background:color-mix(in srgb,var(--sc) 15%,transparent);border:1px solid color-mix(in srgb,var(--sc) 40%,transparent)}
+.aberto{--sc:var(--wa)}.pago{--sc:var(--ok)}.prazo{--sc:var(--ci)}.quebra{--sc:var(--ba)}
+.rw{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--bd)}
+.rw span:first-of-type{color:var(--mut);font-size:13px}
+.lc{max-width:380px;margin:10vh auto 0;text-align:center;padding:18px}
+.lc .c{padding:28px}
+.tt{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);padding:12px 20px;border-radius:14px;background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;font-weight:700;box-shadow:0 10px 40px var(--gl);z-index:100}
+.tt.bad{background:#e11d48}
+.badge-msg{background:rgba(22,163,74,.15);color:var(--ok);border:1px solid rgba(22,163,74,.3);padding:3px 8px;border-radius:99px;font-size:11px;font-weight:800;display:inline-flex;align-items:center;gap:4px}
+
+.ac .b{display:flex;align-items:center;justify-content:center;gap:8px}
+.ac .b .ic{font-size:16px;line-height:1}
+.burger-btn{width:42px;height:42px;padding:0}
+@media(min-width:861px){
+ .lay.collapsed{grid-template-columns:84px 1fr}
+ .lay.collapsed .sb{padding:14px 10px;align-items:center}
+ .lay.collapsed .brand{width:100%;justify-content:center;padding-bottom:12px;margin-bottom:6px}
+ .lay.collapsed .brand .lg,.lay.collapsed .brand-text,.lay.collapsed .it-text,.lay.collapsed .who-text{display:none}
+ .lay.collapsed .mn{width:100%;align-items:center}
+ .lay.collapsed .it{width:48px;height:48px;padding:0;gap:0;justify-content:center}
+ .lay.collapsed .it:hover{transform:none}
+ .lay.collapsed .it .ic{width:auto}
+ .lay.collapsed .me{width:100%;align-items:center;gap:10px;padding-top:12px}
+ .lay.collapsed .who{justify-content:center}
+ .lay.collapsed .ac{flex-direction:column;width:100%;align-items:center;gap:8px}
+ .lay.collapsed .ac .b{flex:none;width:48px;height:44px;padding:0}
+}
+
+select.s{width:auto;padding:5px 8px}
+.x{border:1px solid var(--bd);background:var(--in);border-radius:8px;padding:4px 8px;cursor:pointer;color:var(--tx);font:inherit;transition:.2s}
+.x:hover{background:#e11d48;color:#fff}
+@media(max-width:860px){
+ .lay{grid-template-columns:1fr!important;gap:14px;padding:12px}
+ .burger-btn{display:none}
+ .sb{position:static;height:auto;padding:14px}
+ .mn{flex-direction:row;overflow-x:auto;gap:8px}
+ .it{width:auto;padding:10px 14px}
+ .me{flex-direction:row;align-items:center;justify-content:space-between}
+}
+
+.lg img{width:100%;height:100%;object-fit:contain;display:block}.lg{background:#fff!important;padding:3px;box-sizing:border-box}
+.brandlogo{display:block;width:min(260px,72%);margin:0 auto 18px;background:#fff;padding:12px 18px;border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,.25)}
+html{-webkit-text-size-adjust:100%}img{max-width:100%}.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}.ht{overflow-x:auto}
+@media(min-width:1600px){.lay{max-width:1800px;margin-left:auto;margin-right:auto}}
+@media(max-width:700px){.kp5{grid-template-columns:repeat(2,1fr)!important}.fg,.stack-views{grid-template-columns:1fr!important}.c{padding:14px}table{font-size:13px}.lc .c{width:100%;max-width:100%}}
+@media(max-width:420px){.kp5{grid-template-columns:1fr!important}.b{width:100%}h2{font-size:18px}}
+</style></head><body>
+<div class="bg"><i></i><i></i><i></i></div>
+<div id="app"></div>
+<script>
+const API='/api';
+const KEY='ac_prev';
+const $=(s,e=document)=>e.querySelector(s),
+esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),
+brl=n=>(+n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}),
+dt=s=>s?esc(String(s).split('-').reverse().join('/')):'',
+hoje=()=>new Date().toLocaleDateString('sv-SE'),
+diasAte=s=>{if(!s)return null;const d=new Date(s+'T00:00:00'),h=new Date();h.setHours(0,0,0,0);return Math.round((d-h)/864e5)};
+const ST={prazo:'No prazo',pago:'Sim (Pago)',quebra:'Quebra',aberto:'Aberto'};
+let me=null,cred=null,A=[],last='',busy=false,timer=null,pf='7d',pq='',po='',ocultar=true;
+const app=$('#app'),errMsg=x=>/failed to fetch|networkerror|load failed/i.test(x.message)?'Sem conexão com o servidor':x.message;
+
+function toast(m,bad){const t=document.createElement('div');t.className='tt'+(bad?' bad':'');t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+async function api(action,extra){
+ const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,login:cred.login},cred.token?{token:cred.token}:{senha:cred.senha},extra||{}))});
+ const j=await r.json();if(!j.ok){if(/Sess[aã]o expirada/.test(j.erro||''))sessaoExpirou();throw new Error(j.erro||'Erro no servidor')}return j}
+function sessaoExpirou(){me=null;cred=null;last='';clearInterval(timer);try{localStorage.removeItem(KEY)}catch(x){}loginView();toast('Sessão expirada. Entre novamente.',1)}
+function apply(j,force){const s=JSON.stringify(j.acordos);if(!force&&s===last)return;last=s;
+ A=j.acordos.map(a=>Object.assign({},a,{valor:+a.valor||0,valorParc:+a.valorParc||0,qtdParc:+a.qtdParc||1}));if(me)fill()}
+function iniciar(){clearInterval(timer);timer=setInterval(async()=>{if(!me||busy||document.hidden)return;try{apply(await api('load'))}catch(x){}},30000)}
+
+function loginView(){app.innerHTML='<div class="lc"><div class="c"><img class="brandlogo" src="/logo.png" alt="Meet Call"><h1 style="margin:0 0 4px;font-size:24px">Preventivo</h1><p style="color:var(--mut);margin:0 0 22px">Acordos parcelados a vencer</p><div style="text-align:left"><label>Login</label><input id="lu" autocomplete="username" placeholder="preventivo ou admin"><label style="margin-top:12px">Senha</label><input id="lp" type="password" autocomplete="current-password" placeholder="••••••••"></div><button class="b" id="lg" style="width:100%;margin-top:18px">Entrar</button></div></div>';$('#lg').onclick=entrar;$('#lp').onkeydown=e=>{if(e.key==='Enter')entrar()};$('#lu').onkeydown=e=>{if(e.key==='Enter')$('#lp').focus()}}
+async function entrar(){
+ if(busy)return;const u=$('#lu').value.trim().toLowerCase(),p=$('#lp').value.trim();if(!u||!p)return toast('Informe login e senha',1);
+ busy=true;const bt=$('#lg');bt.disabled=true;bt.textContent='Entrando…';
+ try{cred={login:u,senha:p};const j=await api('login');cred={login:u,token:j.token};if(j.me.role!=='prev'&&j.me.role!=='admin')throw new Error('Acesso exclusivo do setor Preventivo');me=j.me;try{localStorage.setItem(KEY,JSON.stringify(cred))}catch(e){}apply(j,1);shell();iniciar()}
+ catch(x){cred=null;me=null;toast(errMsg(x),1);bt.disabled=false;bt.textContent='Entrar'}
+ finally{busy=false}}
+
+function shell(){
+ app.innerHTML='<div style="max-width:1440px;margin:0 auto;padding:18px"><div class="c" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px"><div class="lg"><img src="/favicon.png" alt="Meet Call"></div><div style="flex:1;min-width:180px"><b style="font-size:18px">Preventivo</b><div style="color:var(--mut);font-size:12px">Acordos parcelados em aberto · cobrança preventiva</div></div><button class="b g" data-a="csv">⬇️ Baixar lista</button><button class="b g" data-a="th" title="Tema">🌓</button><button class="b g" data-a="out">Sair</button></div>'+
+ '<div class="kp5" id="kp"></div>'+
+ '<div class="c"><div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px"><input id="pqb" placeholder="🔍 Buscar nome, CPF ou telefone" style="flex:1;min-width:200px" value="'+esc(pq)+'"><select id="po" style="width:auto;min-width:170px"></select></div>'+
+ '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px"><div id="pchs" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>'+
+ '<div class="tw"><table><thead><tr>'+['Vencimento','Situação','Cliente','CPF','Telefone','Valor de entrada','Parcelas','Dia do acordo','Operador','Cooperativa','Status','Contato'].map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody id="ptb"></tbody></table></div></div></div>';
+ fill()}
+
+const pOk=(a,k)=>{const d=diasAte(a.venc);return k==='todos'||(d!==null&&((k==='venc'&&d<0)||(k==='hoje'&&d===0)||(k==='7d'&&d>=0&&d<=7)||(k==='30d'&&d>=0&&d<=30)))};
+function lista(){return A.filter(a=>a.tipo==='Parcelado'&&(+a.qtdParc||1)>1&&a.status!=='pago'&&a.status!=='quebra')}
+function visiveis(){const L=lista();return L.filter(a=>pOk(a,pf)&&(!po||a.operador===po)&&(!pq||(a.nome+' '+a.cpf+' '+String(a.cpf).replace(/\D/g,'')+' '+a.telefone+' '+String(a.telefone).replace(/\D/g,'')).toLowerCase().includes(pq))).sort((x,y)=>String(x.venc).localeCompare(String(y.venc)))}
+function situ(a){const d=diasAte(a.venc);if(d===null)return '—';
+ if(d<0)return '<span class="s quebra">Vencido há '+(-d)+(d===-1?' dia':' dias')+'</span>';
+ if(d===0)return '<span class="s aberto">Vence hoje</span>';
+ return '<span class="s '+(d<=7?'prazo':'')+'" style="'+(d>7?'--sc:var(--mut)':'')+'">em '+d+(d===1?' dia':' dias')+'</span>'}
+function fill(){if(!$('#ptb'))return;
+ const L=lista(),F=[['7d','Próx. 7 dias'],['hoje','Vencem hoje'],['venc','Vencidos'],['30d','Próx. 30 dias'],['todos','Todos']],rows=visiveis();
+ $('#kp').innerHTML=[['Acordos parcelados',L.length],['Valor de entrada',brl(L.reduce((s,a)=>s+a.valor,0))],['Vencem hoje',L.filter(a=>pOk(a,'hoje')).length],['Próx. 7 dias',L.filter(a=>pOk(a,'7d')).length],['Vencidos',L.filter(a=>pOk(a,'venc')).length]].map(([l,v])=>'<div class="c"><span>'+l+'</span><b>'+v+'</b></div>').join('');
+ $('#pchs').innerHTML=F.map(([k,v])=>'<button class="ch'+(pf===k?' on':'')+'" data-pf="'+esc(k)+'">'+v+' · '+L.filter(a=>pOk(a,k)).length+'</button>').join('');
+ const ops=[...new Set(lista().map(a=>a.operador))].sort((a,b)=>String(a).localeCompare(String(b)));
+ $('#po').innerHTML='<option value="">Todos os operadores</option>'+ops.map(n=>'<option'+(n===po?' selected':'')+'>'+esc(n)+'</option>').join('');
+ const td=v=>'<td>'+esc(v)+'</td>';
+ $('#ptb').innerHTML=rows.slice(0,500).map(a=>{const t=String(a.telefone||'').replace(/\D/g,''),
+  ct=t?'<a class="x" style="text-decoration:none;display:inline-block" target="_blank" rel="noopener" href="https://wa.me/55'+t+'">💬 WhatsApp</a> <a class="x" style="text-decoration:none;display:inline-block" href="tel:+55'+t+'">📞</a>':'—';
+  return '<tr><td><b>'+dt(a.venc)+'</b></td><td>'+situ(a)+'</td><td><b>'+esc(a.nome)+'</b></td>'+td(a.cpf)+td(a.telefone||'—')+td(brl(a.valor))+td(a.qtdParc+'x '+brl(a.valorParc))+'<td>'+dt(a.dia)+'</td>'+td(a.operador)+td(a.coop||'—')+'<td><span class="s '+a.status+'">'+(ST[a.status]||'')+'</span></td><td>'+ct+'</td></tr>'
+ }).join('')||'<tr><td colspan="12" style="text-align:center;color:var(--mut);padding:30px">Nenhum acordo parcelado nesse filtro.</td></tr>'}
+
+function csv(){const z=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"',
+ H=['Vencimento','Cliente','CPF','Telefone','Valor de entrada','Qtd Parcelas','Valor Parcela','Dia do acordo','Operador','Cooperativa','Status'],
+ rows=visiveis().map(a=>[dt(a.venc),a.nome,a.cpf,a.telefone,(+a.valor||0).toFixed(2).replace('.',','),a.qtdParc,(+a.valorParc||0).toFixed(2).replace('.',','),dt(a.dia),a.operador,a.coop,ST[a.status]||'']);
+ const blob=new Blob(['\ufeff'+[H].concat(rows).map(r=>r.map(z).join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'}),u=URL.createObjectURL(blob),l=document.createElement('a');
+ l.href=u;l.download='preventivo_'+hoje()+'.csv';document.body.append(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),1500)}
+
+app.addEventListener('click',e=>{const b=e.target.closest('[data-a],[data-pf]');if(!b)return;const d=b.dataset;
+ if(d.pf){pf=d.pf;return fill()}
+ if(d.a==='csv')return csv();
+ if(d.a==='out'){me=null;cred=null;last='';A=[];clearInterval(timer);try{localStorage.removeItem(KEY)}catch(x){}return loginView()}
+ if(d.a==='th'){const r=document.documentElement,dk=(r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))==='dark';r.dataset.theme=dk?'light':'dark'}});
+app.addEventListener('input',e=>{if(e.target.id==='pqb'){pq=e.target.value.trim().toLowerCase();fill()}});
+app.addEventListener('change',e=>{if(e.target.id==='po'){po=e.target.value;fill()}});
+
+(async()=>{loginView();
+ let c=null;try{c=JSON.parse(localStorage.getItem(KEY))}catch(x){}
+ if(c){busy=true;try{cred=c;const j=await api('login');if(j.token){cred.token=j.token;try{localStorage.setItem(KEY,JSON.stringify(cred))}catch(e){}}if(j.me.role!=='prev'&&j.me.role!=='admin')throw 0;me=j.me;apply(j,1);shell();iniciar()}catch(x){cred=null;me=null}finally{busy=false}}})();
+</script><script src="/script.js"></script></body></html>

@@ -1,0 +1,23 @@
+import { createHmac, timingSafeEqual } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import assert from 'node:assert/strict';
+process.env.TOKEN_SECRET = 'segredo-de-teste';
+const src = readFileSync(new URL('../api/_wa.js', import.meta.url), 'utf8');
+const ini = src.indexOf('const refMidia'), fim = src.indexOf('const limpa');
+const mod = new Function('hmacSegredo', 'timingSafeEqual', 'process', src.slice(ini, fim) + '\nreturn { refMidia, refOk, docValido, mascarar, soNum };');
+const { refMidia, refOk, docValido, mascarar } = mod((t) => createHmac('sha256', process.env.TOKEN_SECRET).update(t).digest('hex'), timingSafeEqual, process);
+
+assert.equal(docValido(''), true, 'vazio é permitido');
+assert.equal(docValido('529.982.247-25'), true, 'CPF válido');
+assert.equal(docValido('111.111.111-11'), false, 'CPF repetido');
+assert.equal(docValido('529.982.247-24'), false, 'dígito errado');
+assert.equal(docValido('11.222.333/0001-81'), true, 'CNPJ válido');
+assert.equal(docValido('12345'), false);
+assert.equal(mascarar('52998224725'), '***.982.***-**');
+assert.ok(!mascarar('11222333000181').includes('11222333000181'));
+const ref = refMidia('ana', 'drive123');
+assert.equal(refOk('ana', 'drive123', ref), true);
+assert.equal(refOk('bruno', 'drive123', ref), false, 'outro operador não pode usar a referência');
+assert.equal(refOk('ana', 'outroarquivo', ref), false, 'não vale para outro arquivo');
+assert.equal(refOk('ana', 'drive123', ''), false);
+console.log('OK: CPF/CNPJ opcional+validação, máscara e referência assinada de mídia');
