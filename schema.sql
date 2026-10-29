@@ -45,3 +45,21 @@ create table if not exists base (
 );
 create index if not exists base_destino_idx on base (destino);
 create index if not exists base_doc_idx on base ((regexp_replace(doc, '\D', '', 'g')));
+
+create table if not exists solicitacoes (
+  id          text primary key,
+  titulo      text not null default '',
+  texto       text not null default '',
+  destino     text not null default 'TODOS',
+  criado_por  text not null default '',
+  criado_em   bigint not null
+);
+create index if not exists solicitacoes_criado_idx on solicitacoes (criado_em desc);
+
+create table if not exists solicitacoes_ciencia (
+  solicitacao_id  text not null,
+  operador_login  text not null,
+  ciente_em       bigint not null,
+  primary key (solicitacao_id, operador_login)
+);
+create index if not exists solicitacoes_ciencia_op_idx on solicitacoes_ciencia (operador_login);

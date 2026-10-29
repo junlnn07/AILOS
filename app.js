@@ -2,7 +2,7 @@ const API='/api';
 const KEY='ac_admin';
 
 const TIPOS=['À vista','Parcelado','Renegociação','Quitação','Boleto','Pix'],
-COOPERATIVAS=['TRANSPOCRED','VIACREDI AV','ACREDICOOP','CREDICOMIN','CREDICREA','CREDIFOZ','VIACREDI','CREVISC','ACENTRA','UNILOS','EVOLUA','CIVIA'],
+COOPERATIVAS=['Transpocred','Credforce','Crevisk'],
 FECHADO_POR=['WhatsApp','Discador','Zap2Go'],
 ST={prazo:'No prazo',pago:'Sim (Pago)',quebra:'Quebra',aberto:'Aberto'};
 
@@ -59,7 +59,7 @@ async function run(action,extra,okMsg){
  try{const j=await api(action,extra);apply(j,1);if(okMsg)toast(okMsg);return true}
  catch(x){toast(errMsg(x),1);return false}
  finally{busy=false}}
-function iniciar(){clearInterval(timer);timer=setInterval(async()=>{if(!me||busy||document.hidden)return;try{apply(await api('load'));if(tab==='rel'){snap();fRel();const u=$('#upd');if(u)u.textContent=new Date().toLocaleTimeString('pt-BR')}}catch(x){}},30000)}
+function iniciar(){clearInterval(timer);timer=setInterval(async()=>{if(!me||busy||document.hidden)return;try{apply(await api('load'));if(tab==='rel'){snap();fRel();const u=$('#upd');if(u)u.textContent=new Date().toLocaleTimeString('pt-BR')}if(tab==='sol')carregarSol()}catch(x){}},30000)}
 
 function loginView(){app.innerHTML='<div class="lc"><div class="c"><img class="brandlogo" src="/logo.png" alt="Meet Call"><h1 style="margin:0 0 4px;font-size:24px">Controle de Acordos</h1><p style="color:var(--mut);margin:0 0 22px">Administrador · Acesso Restrito</p><div style="text-align:left"><label>Login</label><input id="lu" autocomplete="username" placeholder="seu.login"><label style="margin-top:12px">Senha</label><input id="lp" type="password" autocomplete="current-password" placeholder="••••••••"></div><button class="b" id="lg" style="width:100%;margin-top:18px">Entrar</button></div></div>';$('#lg').onclick=entrar;$('#lp').onkeydown=e=>{if(e.key==='Enter')entrar()};$('#lu').onkeydown=e=>{if(e.key==='Enter')$('#lp').focus()}}
 async function entrar(){
@@ -71,7 +71,7 @@ async function entrar(){
  finally{busy=false}}
 
 function MENU(){
- const ad=me.role==='admin',m=[['reg','📝','Registrar acordo'],['plan','📊','Planilha'],['prev','📞','Preventivo'],['op','👥','Operadores']];
+ const ad=me.role==='admin',m=[['reg','📝','Registrar acordo'],['plan','📊','Planilha'],['prev','📞','Preventivo'],['op','👥','Operadores'],['sol','📣','Solicitação']];
  if(ad){m.push(['rel','⏱️','Hora a Hora']);m.push(['dash','📊','Dashboard']);m.push(['wa','💬','WhatsApp']);m.push(['sendbase','📥','Carregar Base'])}
  return m;
 }
@@ -82,8 +82,8 @@ function shell(){
  '<nav class="mn">'+MENU().map(m=>'<button class="it" data-t="'+esc(m[0])+'" title="'+esc(m[2])+'"><span class="ic">'+m[1]+'</span><span class="it-text">'+m[2]+'</span></button>').join('')+'</nav>'+
  '<div class="me"><div class="who"><div class="av">'+esc((me.nome[0]||'?').toUpperCase())+'</div><div class="who-text"><b>'+esc(me.nome)+'</b><span>Administrador</span></div></div><div class="ac"><button class="b g" data-a="th" title="Tema"><span class="ic">🌓</span></button><button class="b g" data-a="out" title="Sair"><span class="ic">🚪</span><span class="it-text">Sair</span></button></div></div></aside><main id="v"></main></div>';
  go(tab)}
-function go(t){tab=t;document.querySelectorAll('.it').forEach(b=>b.classList.toggle('on',b.dataset.t===t));WA.layout(t==='wa');$('#v').innerHTML=V[t]();fill();if(t==='wa')WA.init()}
-function fill(){const F={reg:fReg,plan:fPlan,prev:fPrev,op:fOp,rel:fRel,dash:fDash,wa:()=>{},sendbase:fSendBase}[tab];if(F&&$('#v'))F()}
+function go(t){tab=t;document.querySelectorAll('.it').forEach(b=>b.classList.toggle('on',b.dataset.t===t));WA.layout(t==='wa');$('#v').innerHTML=V[t]();fill();if(t==='wa')WA.init();if(t==='sol')carregarSol(true)}
+function fill(){const F={reg:fReg,plan:fPlan,prev:fPrev,op:fOp,sol:fSol,rel:fRel,dash:fDash,wa:()=>{},sendbase:fSendBase}[tab];if(F&&$('#v'))F()}
 
 const V={
 prev(){const ad=me.role==='admin',H=['Dia do acordo'].concat(ad?['Operador']:[],['Cliente','CPF','Telefone','Valor de entrada','Parcelas','1º vencimento','Cooperativa','Status','Contato']);
@@ -109,7 +109,7 @@ f('Fechado por','<select id="f7"><option value="">Selecione</option>'+fch+'</sel
 f('Ativo','<select id="f8"><option>Sim</option><option>Não</option></select>')+
 '</div><button class="b" id="bsave" data-a="save" style="margin-top:20px">✨ Registrar acordo</button></div><div class="c" style="margin-top:16px"><h3 style="margin:0 0 6px">Últimos acordos</h3><div id="rec"></div></div>'},
 
-plan(){const H=['Operador','CPF','Nome','Telefone','Tipo','Valor 1º Pag.','Parcelas','Vencimento','Cooperativa','Fechado por','Status',''];
+plan(){const H=['Registrado em','Operador','CPF','Nome','Telefone','Tipo','Valor 1º Pag.','Parcelas','Vencimento','Cooperativa','Fechado por','Status',''];
 return '<div class="kp5">'+['Acordos','Valor 1º Pagamento'].map((l,i)=>'<div class="c"><span>'+l+'</span><b id="k'+i+'">0</b></div>').join('')+'</div><div class="c"><div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px"><input id="bq" placeholder="🔍 Buscar nome, CPF, cooperativa ou operador" style="flex:1;min-width:200px" value="'+esc(q)+'"><div id="chs" style="display:flex;gap:6px;flex-wrap:wrap"></div><button class="b" data-a="csv">⬇️ Baixar planilha (CSV)</button></div><div class="tw"><table><thead><tr>'+H.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody id="tb"></tbody></table></div></div>'},
 
 op(){return '<div class="c"><h2 style="margin:0 0 12px">Gerenciar Operadores</h2><div class="fg" style="align-items:end"><div><label>Nome</label><input id="on" placeholder="Nome do operador"></div><div><label>Login</label><input id="ol" placeholder="nome.sobrenome"></div><div><label>CPF (senha inicial = 6 primeiros dígitos)</label><input id="ocpf" inputmode="numeric" placeholder="000.000.000-00"></div><button class="b" data-a="addop">➕ Adicionar operador</button></div></div><div class="og" id="og" style="margin-top:16px"></div>'},
@@ -129,6 +129,9 @@ return '<div class="c" style="margin-bottom:16px"><div style="display:flex;justi
 '<div class="c"><h3 style="margin:0 0 12px;font-size:15px">🏛️ COOPERATIVAS DO DIA</h3><div class="tw"><table><thead><tr><th>NOME</th><th>ACORDOS</th><th>VALOR 1º PAGAMENTO</th><th>VALOR NEGOCIADO</th><th>PARTICIPAÇÃO</th></tr></thead><tbody id="tb_coops"></tbody></table></div></div>'+
 '</div>'+
 '<div class="c" style="margin-top:16px"><h3 style="margin:0 0 12px;font-size:15px">🤝 ACORDOS DO DIA</h3><div class="tw"><table><thead><tr><th>HORA</th><th>OPERADOR</th><th>CLIENTE</th><th>TIPO</th><th>COOPERATIVA</th><th>1º PAG.</th><th>NEGOCIADO</th><th>STATUS</th></tr></thead><tbody id="tb_dia"></tbody></table></div></div>'},
+
+sol(){const ops=O.map(o=>'<option value="'+esc(o.login)+'">'+esc(o.nome)+' (@'+esc(o.login)+')</option>').join('');
+return '<div class="c"><h2 style="margin:0 0 6px">📣 Solicitação</h2><p style="color:var(--mut);margin:0 0 18px">Envie um recado para os operadores. Cada operador precisa abrir, ler e dar ciência — aqui você acompanha quem já confirmou.</p><div class="fg"><div><label>Destino</label><select id="sol_d"><option value="TODOS">📢 Todos os operadores</option>'+ops+'</select></div><div><label>Título (opcional)</label><input id="sol_t" maxlength="120" placeholder="Ex.: Novo script de abordagem"></div><div style="flex:1 1 100%"><label>Mensagem</label><textarea id="sol_m" maxlength="2000" placeholder="Escreva o recado para o operador…"></textarea></div></div><button class="b" id="sol_btn" data-a="solenviar" style="margin-top:18px">📣 Enviar solicitação</button></div><div class="sol-l" id="sol_l"></div>'},
 
 wa(){return WA.html()},
 dash(){const hj=hoje(),sel=(id)=>'<select id="'+esc(id)+'" onchange="fDash()"></select>';return '<div class="c" style="margin-bottom:16px"><h2 style="margin:0 0 12px">📊 Dashboard de Acordos</h2><div class="fg" style="align-items:end"><div><label>Data inicial</label><input type="date" id="d_ini" value="'+hj.slice(0,8)+'01" onchange="fDash()"></div><div><label>Data final</label><input type="date" id="d_fim" value="'+esc(hj)+'" onchange="fDash()"></div><div><label>Operador</label>'+sel('d_op')+'</div><div><label>Cooperativa</label>'+sel('d_co')+'</div><div><label>Status</label><select id="d_st" onchange="fDash()"><option value="">Todos</option><option value="prazo">No prazo</option><option value="pago">Pago</option><option value="aberto">Aberto</option><option value="quebra">Quebra</option></select></div><div><label>Busca (nome ou CPF)</label><input id="d_q" placeholder="Digite para buscar…" oninput="fDash()"></div></div><p id="d_n" style="margin:12px 0 0;color:var(--mut)"></p></div><div class="kp5" id="d_k" style="display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin-bottom:16px"></div><div class="stack-views"><div class="c"><h3 style="margin:0 0 12px;font-size:15px">🏆 RANKING DE OPERADORES</h3><div class="tw"><table>'+RH+'<tbody id="d_tops"></tbody></table></div></div><div class="c"><h3 style="margin:0 0 12px;font-size:15px">🏛️ COOPERATIVAS</h3><div class="tw"><table>'+RH+'<tbody id="d_tcoops"></tbody></table></div></div></div>'},
@@ -160,13 +163,15 @@ function fReg(){const r=$('#rec');if(!r)return;r.className='ac-l';r.innerHTML=mi
 
 function row(a,i){const ad=me.role==='admin',td=v=>'<td>'+esc(v)+'</td>',
 st=ad?'<select class="s '+a.status+'" data-s="'+esc(a.id)+'">'+Object.entries(ST).map(([k,v])=>'<option value="'+esc(k)+'"'+(k===a.status?' selected':'')+'>'+v+'</option>').join('')+'</select>':'<span class="s '+a.status+'">'+(ST[a.status]||'')+'</span>',
-pStr=a.tipo==='Parcelado'?(a.qtdParc+'x '+brl(a.valorParc)):'—';
-return '<tr>'+td(a.operador)+td(a.cpf)+td(a.nome)+td(a.telefone||'—')+td(a.tipo)+td(brl(a.valor))+td(pStr)+'<td>'+dt(a.venc)+'</td>'+td(a.coop||'—')+td(a.fechado)+'<td>'+st+'</td>'+(ad?'<td><button class="x" data-del="'+esc(a.id)+'">🗑</button></td>':'')+'</tr>'}
+pStr=a.tipo==='Parcelado'?(a.qtdParc+'x '+brl(a.valorParc)):'—',
+reg=a.criadoEm?dtH(a.criadoEm):dt(a.dia),
+fe=a.dia&&a.criadoEm&&a.dia!==new Date(a.criadoEm).toLocaleDateString('sv-SE')?'<small style="display:block;color:var(--mut)" title="Acordo fechado em outro dia e incluído pela Planilha">↩ fechado em '+dt(a.dia)+'</small>':'';
+return '<tr><td style="white-space:nowrap">'+reg+fe+'</td>'+td(a.operador)+td(a.cpf)+td(a.nome)+td(a.telefone||'—')+td(a.tipo)+td(brl(a.valor))+td(pStr)+'<td>'+dt(a.venc)+'</td>'+td(a.coop||'—')+td(a.fechado)+'<td>'+st+'</td>'+(ad?'<td><button class="x" data-del="'+esc(a.id)+'">🗑</button></td>':'')+'</tr>'}
 
 function fPlan(){if(!$('#tb'))return;const L=mine(),c=s=>L.filter(a=>a.status===s).length,rows=fil();
 $('#chs').innerHTML=[['todos','Todos',L.length]].concat(Object.entries(ST).map(([k,v])=>[k,v,c(k)])).map(([k,v,n])=>'<button class="ch'+(fl===k?' on':'')+'" data-f="'+esc(k)+'">'+v+' · '+n+'</button>').join('');
 setN('k0',L.length);setN('k1',sum(L),1);
-$('#tb').innerHTML=rows.slice(0,300).map(row).join('')||'<tr><td colspan="12" style="text-align:center;color:var(--mut);padding:30px">Nenhum acordo encontrado.</td></tr>'}
+$('#tb').innerHTML=rows.slice(0,300).map(row).join('')||'<tr><td colspan="13" style="text-align:center;color:var(--mut);padding:30px">Nenhum acordo encontrado.</td></tr>'}
 
 function fOp(){const g=$('#og');if(!g)return;
 g.innerHTML=O.map((o,i)=>{const L=A.filter(a=>a.operador===o.nome),p=L.filter(a=>a.status==='pago'||a.status==='prazo').length,pc=L.length?Math.round(p/L.length*100):0;
@@ -179,6 +184,23 @@ async function mudarSenha(opId){
  await run('setpass',{id:opId,novaSenha:v},'Senha alterada com sucesso!')}
 
 function fSendBase(){}
+
+let SOL=[],solSig='';
+const dtH=ms=>{if(!ms)return '';const d=new Date(ms);return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})};
+function solApply(j,force){const s=JSON.stringify(j.solicitacoes||[]);if(!force&&s===solSig)return;solSig=s;SOL=j.solicitacoes||[];fSol()}
+async function carregarSol(force){try{solApply(await api('sol_lista'),force)}catch(x){if(force)toast(errMsg(x),1)}}
+function fSol(){const b=$('#sol_l');if(!b)return;
+ b.innerHTML=SOL.map(s=>{const al=s.alvos||[],ok=al.filter(x=>x.cienteEm).length,pc=al.length?Math.round(ok/al.length*100):0,
+  dest=s.destino==='TODOS'?'📢 Todos os operadores':'👤 '+esc((O.find(o=>o.login===s.destino)||{}).nome||s.destino),
+  chips=al.map(x=>'<span class="sol-ch '+(x.cienteEm?'ok':'pe')+'">'+(x.cienteEm?'✅ ':'⏳ ')+esc(x.nome)+(x.cienteEm?' · ciente em '+dtH(x.cienteEm):' · aguardando')+'</span>').join('')||'<span class="sol-ch">Nenhum operador para receber</span>';
+  return '<div class="c sol'+(al.length&&ok===al.length?' done':'')+'"><div class="sol-h"><div><b>'+(s.titulo?esc(s.titulo):'Solicitação')+'</b><div class="sol-m">'+dest+' · enviada em '+dtH(s.criadoEm)+'</div></div><button class="x" data-sdel="'+esc(s.id)+'" title="Excluir">🗑</button></div><div class="sol-tx">'+esc(s.texto)+'</div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span><b>'+ok+'</b> de '+al.length+' deram ciência</span><span>'+pc+'%</span></div><div class="pg" style="margin-bottom:12px"><i style="width:'+pc+'%"></i></div><div class="sol-f">'+chips+'</div></div>'}).join('')||'<div class="c" style="color:var(--mut)">Nenhuma solicitação enviada ainda.</div>'}
+async function enviarSol(){
+ if(busy)return;const t=$('#sol_t').value.trim(),m=$('#sol_m').value.trim(),d=$('#sol_d').value;
+ if(!m)return toast('Escreva a solicitação',1);
+ busy=true;const bt=$('#sol_btn');if(bt)bt.disabled=true;
+ try{solApply(await api('sol_enviar',{destino:d,titulo:t,texto:m}),1);$('#sol_t').value='';$('#sol_m').value='';toast('Solicitação enviada! 📣')}
+ catch(x){toast(errMsg(x),1)}
+ finally{busy=false;if(bt)bt.disabled=false}}
 
 const norm=s=>String(s==null?'':s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');
 function lerCsv(txt){
@@ -308,17 +330,19 @@ rows=fil().map(a=>[a.operador,a.cpf,a.nome,a.telefone||'',a.tipo,(+a.valor||0).t
 const blob=new Blob(['\ufeff'+[H].concat(rows).map(r=>r.map(z).join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'}),u=URL.createObjectURL(blob),l=document.createElement('a');
 l.href=u;l.download='acordos_'+hoje()+'.csv';document.body.append(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),1500)}
 
-app.addEventListener('click',async e=>{const b=e.target.closest('[data-a],[data-t],[data-f],[data-pf],[data-del],[data-dop]');if(!b)return;const d=b.dataset;
+app.addEventListener('click',async e=>{const b=e.target.closest('[data-a],[data-t],[data-f],[data-pf],[data-del],[data-dop],[data-sdel]');if(!b)return;const d=b.dataset;
 if(d.t)return go(d.t);
 if(d.pf){pf=d.pf;return fPrev()}
 if(d.f){fl=d.f;return fill()}
 if(d.a==='toggleSidebar'){sidebarCollapsed=!sidebarCollapsed;try{localStorage.setItem('ac_sb',sidebarCollapsed?'1':'0')}catch(x){}const lay=$('#mainLayout');if(lay)lay.classList.toggle('collapsed',sidebarCollapsed);return}
-if(d.a==='out'){me=null;cred=null;last='';A=[];O=[];NM=[];clearInterval(timer);try{localStorage.removeItem(KEY)}catch(x){}return loginView()}
+if(d.a==='out'){me=null;cred=null;last='';A=[];O=[];NM=[];SOL=[];solSig='';clearInterval(timer);try{localStorage.removeItem(KEY)}catch(x){}return loginView()}
 if(d.a==='th'){const r=document.documentElement,dk=(r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))==='dark';r.dataset.theme=dk?'light':'dark';return}
 if(d.a==='save')return save();
 if(d.a==='csv')return csv();
 if(d.a==='sendbase')return enviarBase();
 if(d.a==='addop')return addop();
+if(d.a==='solenviar')return enviarSol();
+if(d.sdel){if(pend!==b){pend=b;b.textContent='Confirmar?';setTimeout(()=>{if(pend===b){pend=null;b.textContent='🗑'}},3000);return}pend=null;try{solApply(await api('sol_excluir',{id:d.sdel}),1);toast('Solicitação excluída')}catch(x){toast(errMsg(x),1)}return}
 if(d.a==='ref'){try{apply(await api('load'),1)}catch(x){toast(errMsg(x),1)}snap();toast('Relatório atualizado');return go('rel')}
 if(d.del||d.dop){if(pend!==b){pend=b;b.textContent='Confirmar?';setTimeout(()=>{if(pend===b){pend=null;b.textContent='🗑'}},3000);return}
 pend=null;await run(d.del?'del':'delop',{id:d.del||d.dop},'Removido')}});

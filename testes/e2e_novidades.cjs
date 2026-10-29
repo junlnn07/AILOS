@@ -5,7 +5,7 @@ const ok = (m) => console.log('  ✓ ' + m);
 const rec = { connect: [] };
 const BASE = [
   { id: '1', coop: 'TRANSPOCRED', doc: '1', nome: 'BETO', razao: 'BETO', atraso: '10', saldo: 100, tel: '', garantia: 'Sim' },
-  { id: '2', coop: 'VIACREDI', doc: '2', nome: 'ANA', razao: 'ANA', atraso: '200', saldo: 5000.5, tel: '', garantia: 'Não' },
+  { id: '2', coop: 'CREDFORCE', doc: '2', nome: 'ANA', razao: 'ANA', atraso: '200', saldo: 5000.5, tel: '', garantia: 'Não' },
   { id: '3', coop: 'TRANSPOCRED', doc: '3', nome: 'CARLA', razao: 'CARLA', atraso: '45', saldo: 20, tel: '', garantia: 'Não' },
 ];
 const sess = [{ login: 'ana', nome: 'Ana', desejada: true, status: 'conectado', numero: '5541900000000', atualizado_em: Date.now() }];
@@ -45,7 +45,7 @@ const srv = http.createServer((req, res) => {
     assert.deepEqual(await nomes(), ['CARLA', 'BETO', 'ANA']); ok('Base: nome Z → A');
     await page.click('#bh_saldo'); await page.click('#bmenu [data-bso="saldo|-1"]');
     assert.deepEqual(await nomes(), ['ANA', 'BETO', 'CARLA']); ok('Base: saldo maior → menor');
-    await page.click('#bh_coop'); await page.click('#bmenu [data-bfv^="coop|VIACREDI"]');
+    await page.click('#bh_coop'); await page.click('#bmenu [data-bfv^="coop|CREDFORCE"]');
     assert.deepEqual(await nomes(), ['ANA']); ok('Base: filtro por cooperativa');
     await page.click('#bh_coop'); await page.click('#bmenu [data-clr="coop"]');
     assert.equal((await nomes()).length, 3); ok('Base: limpar filtro');

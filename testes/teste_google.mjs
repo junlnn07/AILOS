@@ -26,7 +26,7 @@ const ctx = {
   Logger: { log() {} }, Date, JSON, String, Number, Math, Object, Array,
 };
 vm.createContext(ctx);
-vm.runInContext(readFileSync(new URL('../google-ailos.gs', import.meta.url), 'utf8'), ctx);
+vm.runInContext(readFileSync(new URL('../google-opcional/google-ailos.gs', import.meta.url), 'utf8'), ctx);
 const post = (o) => ctx.doPost({ postData: { contents: JSON.stringify(o) } });
 
 assert.equal(post({ action: 'ping', key: 'errada' }).erro, 'chave inválida');

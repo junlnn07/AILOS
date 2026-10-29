@@ -1,5 +1,5 @@
 {
-  "name": "ailos-acordos",
+  "name": "acordos-ailos",
   "version": "2.0.0",
   "private": true,
   "type": "module",
@@ -12,6 +12,7 @@
   "scripts": {
     "test": "node testes/teste_wa.mjs && python3 whatsapp-service/testes/test_arquivador.py && python3 whatsapp-service/testes/test_midia.py && python3 whatsapp-service/testes/test_plano_b.py && python3 whatsapp-service/testes/test_fotos.py",
     "test:tela": "node testes/e2e_novidades.cjs",
-    "test:seguranca": "node testes/e2e_seguranca.cjs"
+    "test:seguranca": "node testes/e2e_seguranca.cjs",
+    "test:solicitacao": "node testes/e2e_solicitacao.cjs"
   }
 }
